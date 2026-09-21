@@ -1,27 +1,61 @@
-from transformers import pipeline
-
-
 # ============================================================
-# MODEL CONFIGURATION
+# JANSAHARA LLM ENGINE
 # ============================================================
+#
+# The LLM is optional.
+# This allows JanSahara to run on low-memory hosting services.
+#
+# Set ENABLE_LLM=true in the environment when a sufficiently
+# powerful server is available.
+# ============================================================
+
+import os
+
+ENABLE_LLM = os.getenv("ENABLE_LLM", "false").lower() == "true"
 
 MODEL_NAME = "Qwen/Qwen2.5-1.5B-Instruct"
 
+llm = None
+
 
 # ============================================================
-# LOAD MODEL
+# LOAD MODEL ONLY WHEN ENABLED
 # ============================================================
 
-print("Loading JanSahara LLM...")
+def load_llm():
 
-llm = pipeline(
-    "text-generation",
-    model=MODEL_NAME,
-    device_map="auto",
-    dtype="auto"
-)
+    global llm
 
-print("JanSahara LLM loaded successfully.")
+    if not ENABLE_LLM:
+        return None
+
+    if llm is not None:
+        return llm
+
+    try:
+
+        from transformers import pipeline
+
+        print("Loading JanSahara LLM...")
+
+        llm = pipeline(
+            "text-generation",
+            model=MODEL_NAME,
+            device_map="auto",
+            dtype="auto"
+        )
+
+        print("JanSahara LLM loaded successfully.")
+
+        return llm
+
+    except Exception as e:
+
+        print("JanSahara LLM could not be loaded:", e)
+
+        llm = None
+
+        return None
 
 
 # ============================================================
@@ -32,6 +66,26 @@ def generate_llm_response(
     user_query,
     context
 ):
+
+    model = load_llm()
+
+    # --------------------------------------------------------
+    # LLM DISABLED / UNAVAILABLE
+    # --------------------------------------------------------
+
+    if model is None:
+
+        return (
+            "I can provide information from the JanSahara "
+            "database, but the AI explanation service is "
+            "currently unavailable. Please use the scheme "
+            "details, eligibility result, recommendation "
+            "and official source provided by JanSahara."
+        )
+
+    # --------------------------------------------------------
+    # SYSTEM PROMPT
+    # --------------------------------------------------------
 
     system_prompt = """
 You are JanSahara, a government scheme assistance chatbot.
@@ -79,7 +133,6 @@ STRICT RULES:
     the final requirements using the official scheme source.
 """
 
-
     user_prompt = f"""
 User question:
 {user_query}
@@ -101,27 +154,37 @@ Using only the verified information above, answer the user's question.
         }
     ]
 
-    output = llm(
-        messages,
-        max_new_tokens=250,
-        do_sample=True,
-        temperature=0.3,
-        top_p=0.9
-    )
+    try:
 
-    generated = output[0]["generated_text"]
-
-    # The pipeline returns the conversation.
-    # Extract the final assistant response.
-    if isinstance(generated, list):
-
-        response = generated[-1].get(
-            "content",
-            ""
+        output = model(
+            messages,
+            max_new_tokens=250,
+            do_sample=True,
+            temperature=0.3,
+            top_p=0.9
         )
 
-    else:
+        generated = output[0]["generated_text"]
 
-        response = str(generated)
+        if isinstance(generated, list):
 
-    return response.strip()
+            response = generated[-1].get(
+                "content",
+                ""
+            )
+
+        else:
+
+            response = str(generated)
+
+        return response.strip()
+
+    except Exception as e:
+
+        print("LLM response error:", e)
+
+        return (
+            "The AI explanation service is currently "
+            "unavailable. Please refer to the JanSahara "
+            "scheme information and official source."
+        )
