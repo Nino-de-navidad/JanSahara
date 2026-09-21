@@ -45,7 +45,7 @@
 
 <footer><span>© 2026 JanSahara</span><span>Government Scheme Discovery & Eligibility Platform</span></footer>
 <script>
-const API_BASE='http://localhost:5000';
+const API_BASE='https://jansahara-backend.onrender.com';
 const userId=localStorage.getItem('jansahara_user_id') || sessionStorage.getItem('jansahara_user_id');
 const messages=document.getElementById('messages'), form=document.getElementById('chatForm'), query=document.getElementById('query'), sendBtn=document.getElementById('sendBtn');
 document.getElementById('userPill').textContent='User: '+(userId||'Not logged in');
@@ -53,7 +53,7 @@ function addMessage(text,type='bot',extra=null){const row=document.createElement
 function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function welcome(){messages.innerHTML='';addMessage('Hello! I am the JanSahara AI Assistant. Ask me about government schemes, eligibility, benefits, documents, or applications.','bot');}
 welcome();
-async function sendMessage(text){text=text.trim();if(!text)return;if(!userId){addMessage('Please log in first so I can use your JanSahara profile for personalized answers.','bot');return;}addMessage(text,'user');query.value='';sendBtn.disabled=true;sendBtn.textContent='...';addMessage('Thinking…','bot');const typingRow=messages.lastElementChild;typingRow.querySelector('.bubble').classList.add('typing');try{const res=await fetch(`${API_BASE}/api/chat/${encodeURIComponent(userId)}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query:text})});const data=await res.json();typingRow.remove();if(!res.ok||data.status!=='success')throw new Error(data.message||'Unable to get a response');addMessage(data.response||'I could not generate a response for that question.', 'bot', data);}catch(err){typingRow.remove();addMessage('I could not connect to the JanSahara server. Please make sure Flask is running on localhost:5000 and try again.','bot');console.error(err)}finally{sendBtn.disabled=false;sendBtn.textContent='Send';query.focus()}}
+async function sendMessage(text){text=text.trim();if(!text)return;if(!userId){addMessage('Please log in first so I can use your JanSahara profile for personalized answers.','bot');return;}addMessage(text,'user');query.value='';sendBtn.disabled=true;sendBtn.textContent='...';addMessage('Thinking…','bot');const typingRow=messages.lastElementChild;typingRow.querySelector('.bubble').classList.add('typing');try{const res=await fetch(`${API_BASE}/api/chat/${encodeURIComponent(userId)}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query:text})});const data=await res.json();typingRow.remove();if(!res.ok||data.status!=='success')throw new Error(data.message||'Unable to get a response');addMessage(data.response||'I could not generate a response for that question.', 'bot', data);}catch(err){typingRow.remove();addMessage('I could not connect to the JanSahara server. Please check your connection and try again.','bot');console.error(err)}finally{sendBtn.disabled=false;sendBtn.textContent='Send';query.focus()}}
 form.addEventListener('submit',e=>{e.preventDefault();sendMessage(query.value)});query.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage(query.value)}});document.querySelectorAll('.suggestion').forEach(b=>b.addEventListener('click',()=>sendMessage(b.textContent)));document.getElementById('clearChat').addEventListener('click',welcome);
 </script>
 </body>

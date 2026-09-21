@@ -17,7 +17,7 @@
 </main>
 <footer><span>© 2026 JanSahara</span><span>Government Scheme Discovery & Eligibility Platform</span></footer>
 <script>
-const API='http://localhost:5000';
+const API='https://jansahara-backend.onrender.com';
 const userId=localStorage.getItem('jansahara_user_id')||sessionStorage.getItem('jansahara_user_id');
 if(!userId) location.href='login.html';
 const $=id=>document.getElementById(id);
@@ -40,7 +40,7 @@ function render(items){
 }
 async function load(){
  $('status').textContent='Loading recommendations...';$('status').className='status muted';$('cards').innerHTML='<div class="loading">Finding schemes for your profile…</div>';
- try{const res=await fetch(`${API}/api/recommendations/${encodeURIComponent(userId)}`);const data=await res.json();if(!res.ok||data.status!=='success')throw new Error(data.message||'Unable to load recommendations.');$('totalSchemes').textContent=data.total_schemes??'—';$('totalCandidates').textContent=data.total_candidates??'—';render(data.recommendations||[]);$('status').textContent='✓ Recommendations generated from your current profile';$('status').className='status success'}catch(e){$('cards').innerHTML='<div class="empty"><h2>Could not load recommendations</h2><p>'+escapeHTML(e.message)+'</p><p style="margin-top:8px">Make sure Flask is running on port 5000.</p></div>';$('status').textContent='Backend connection error';$('status').className='status error'}}
+ try{const res=await fetch(`${API}/api/recommendations/${encodeURIComponent(userId)}`);const data=await res.json();if(!res.ok||data.status!=='success')throw new Error(data.message||'Unable to load recommendations.');$('totalSchemes').textContent=data.total_schemes??'—';$('totalCandidates').textContent=data.total_candidates??'—';render(data.recommendations||[]);$('status').textContent='✓ Recommendations generated from your current profile';$('status').className='status success'}catch(e){$('cards').innerHTML='<div class="empty"><h2>Could not load recommendations</h2><p>'+escapeHTML(e.message)+'</p><p style="margin-top:8px">Please check your JanSahara server connection and try again.</p></div>';$('status').textContent='Backend connection error';$('status').className='status error'}}
 $('refreshBtn').onclick=load;load();
 </script>
 </body></html>

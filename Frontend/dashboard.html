@@ -33,7 +33,15 @@
       <div class="profile-cta" id="profileCta">
         <h3>📋 Complete your profile</h3>
         <p>Complete the JanSahara questionnaire so we can show your personal profile and provide more accurate scheme recommendations and AI assistance.</p>
-        <a class="complete-btn" href="https://forms.gle/rgAv9pjBGZURxfDg9" target="_blank" rel="noopener noreferrer">Complete your profile ↗</a>
+        <a
+          class="complete-btn"
+          id="completeProfileBtn"
+          href="#"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Complete your profile ↗
+        </a>
       </div>
     </section>
 
@@ -73,17 +81,16 @@
   <footer><span>© 2026 JanSahara</span><span>Government Scheme Discovery & Eligibility Platform</span></footer>
 
   <script>
-    const API_BASE_URL = 'http://localhost:5000';
+    const API_BASE_URL = 'https://jansahara-backend.onrender.com';
     const userId = localStorage.getItem('jansahara_user_id') || sessionStorage.getItem('jansahara_user_id');
     const email = localStorage.getItem('jansahara_email') || sessionStorage.getItem('jansahara_email');
 
-    const profileFormBtn = document.getElementById('profileFormBtn');
-    if (profileFormBtn && userId) {
-      profileFormBtn.href = 'https://docs.google.com/forms/d/e/1FAIpQLSc9BTsHN5tKxQ51Aq7to273TGJ0B1_OhvRa9m9gXdISmTUmbg/viewform?usp=pp_url&entry.952470711=' + encodeURIComponent(userId);
-    }
     const completeProfileBtn = document.getElementById('completeProfileBtn');
+
     if (completeProfileBtn && userId) {
-      completeProfileBtn.href = 'https://docs.google.com/forms/d/e/1FAIpQLSc9BTsHN5tKxQ51Aq7to273TGJ0B1_OhvRa9m9gXdISmTUmbg/viewform?usp=pp_url&entry.952470711=' + encodeURIComponent(userId);
+      completeProfileBtn.href =
+        'https://docs.google.com/forms/d/e/1FAIpQLSc9BTsHN5tKxQ51Aq7to273TGJ0B1_OhvRa9m9gXdISmTUmbg/viewform?usp=pp_url&entry.952470711='
+        + encodeURIComponent(userId);
     }
 
     if (!userId) {
