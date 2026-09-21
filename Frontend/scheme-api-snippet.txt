@@ -1,0 +1,44 @@
+# Add these routes to app.py (before the START FLASK SERVER section)
+
+@app.route("/api/schemes", methods=["GET"])
+def get_schemes():
+    conn = None
+    cursor = None
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("""
+            SELECT scheme_id, scheme_name, government_level, state_scope,
+                   ministry_department, scheme_category, scheme_type,
+                   target_beneficiary, eligibility_summary, benefit_description,
+                   application_mode, application_portal, scheme_description,
+                   official_source_url, classification_keywords
+            FROM government_schemes
+            ORDER BY scheme_category, scheme_name
+        """)
+        schemes = cursor.fetchall()
+        return jsonify({"status": "success", "total_schemes": len(schemes), "schemes": schemes}), 200
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+    finally:
+        if cursor: cursor.close()
+        if conn: conn.close()
+
+
+@app.route("/api/schemes/<scheme_id>", methods=["GET"])
+def get_scheme(scheme_id):
+    conn = None
+    cursor = None
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("SELECT * FROM government_schemes WHERE scheme_id = %s", (scheme_id.strip().upper(),))
+        scheme = cursor.fetchone()
+        if not scheme:
+            return jsonify({"status": "error", "message": "Scheme not found"}), 404
+        return jsonify({"status": "success", "scheme": scheme}), 200
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+    finally:
+        if cursor: cursor.close()
+        if conn: conn.close()

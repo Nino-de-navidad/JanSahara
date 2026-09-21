@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JanSahara | Government Schemes Made Simpler</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="brand.js"></script>
+
+  <style>
+    /* =========================
+       ABOUT / CREATOR SECTION
+       ========================= */
+
+    .about-section {
+      padding: 80px 5%;
+      background: #f7fafc;
+      border-top: 1px solid #e3edf4;
+    }
+
+    .about-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .about-content .eyebrow {
+      display: inline-block;
+      margin-bottom: 12px;
+    }
+
+    .about-content h2 {
+      margin: 0 0 15px;
+      color: #12355b;
+      font-size: clamp(30px, 4vw, 42px);
+      line-height: 1.15;
+    }
+
+    .about-content p {
+      color: #5d6b78;
+      line-height: 1.7;
+      max-width: 650px;
+      margin: 0;
+    }
+
+    .creator-card {
+      background: #ffffff;
+      border: 1px solid #dfe8ef;
+      border-radius: 20px;
+      padding: 30px;
+      text-align: center;
+      box-shadow: 0 12px 30px rgba(18, 53, 91, 0.08);
+    }
+
+    .creator-badge {
+      width: 70px;
+      height: 70px;
+      margin: 0 auto 18px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #12355b, #1e6fb9);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 25px;
+      font-weight: 800;
+    }
+
+    .creator-card .made-by {
+      margin: 0 0 8px;
+      color: #16835b;
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+    }
+
+    .creator-card h3 {
+      margin: 0 0 8px;
+      color: #12355b;
+      font-size: 26px;
+    }
+
+    .creator-card .course {
+      margin: 0 0 5px;
+      color: #4f6070;
+      font-weight: 700;
+    }
+
+    .creator-card .college {
+      margin: 0;
+      color: #71808d;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 800px) {
+      .about-container {
+        grid-template-columns: 1fr;
+      }
+
+      .creator-card {
+        max-width: 500px;
+        width: 100%;
+        margin: 0 auto;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="navbar">
+    <a class="logo" href="#home">Jan<span>Sahara</span></a>
+
+    <nav>
+      <a href="#home">Home</a>
+      <a href="#features">Features</a>
+      <a href="#how-it-works">How It Works</a>
+      <a href="#about">About</a>
+      <a class="btn btn-outline" href="login.html">Sign In</a>
+    </nav>
+
+    <button class="menu-btn" aria-label="Open menu">☰</button>
+  </header>
+
+  <main>
+
+    <!-- HERO -->
+    <section class="hero" id="home">
+      <div class="hero-copy">
+        <span class="eyebrow">
+          AI-POWERED GOVERNMENT SCHEME DISCOVERY
+        </span>
+
+        <h1>
+          Government benefits,<br>
+          <span>made simpler.</span>
+        </h1>
+
+        <p>
+          JanSahara helps you discover government schemes, understand
+          eligibility, and find benefits relevant to your profile —
+          all in one place.
+        </p>
+
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="register.html">
+            Get Started <span>→</span>
+          </a>
+
+          <a class="btn btn-light" href="scheme-explorer.html">
+            Explore Schemes
+          </a>
+        </div>
+
+        <div class="trust-row">
+          <span>✓ Profile-based matching</span>
+          <span>✓ Eligibility checks</span>
+          <span>✓ Official portals</span>
+        </div>
+      </div>
+
+      <div class="dashboard-preview">
+        <div class="preview-header">
+          <div>
+            <strong>Your Scheme Matches</strong>
+            <small>Based on your profile</small>
+          </div>
+
+          <span class="ai-pill">AI ANALYSIS</span>
+        </div>
+
+        <div class="scheme-card">
+          <div>
+            <strong>Higher Education Scholarship</strong>
+            <small>Education · Students</small>
+          </div>
+          <b>96%</b>
+        </div>
+
+        <div class="scheme-card">
+          <div>
+            <strong>Student Financial Support</strong>
+            <small>Financial · Students</small>
+          </div>
+          <b>91%</b>
+        </div>
+
+        <div class="scheme-card">
+          <div>
+            <strong>Skill Development Programme</strong>
+            <small>Employment · Youth</small>
+          </div>
+          <b>84%</b>
+        </div>
+
+        <div class="preview-footer">
+          View eligibility details <span>→</span>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- FEATURES -->
+    <section class="section" id="features">
+
+      <div class="section-heading">
+        <span class="eyebrow">WHAT JANSAHARA OFFERS</span>
+
+        <h2>
+          One place to discover the support available to you.
+        </h2>
+
+        <p>
+          From discovery to eligibility, JanSahara brings the journey
+          together in a simple interface.
+        </p>
+      </div>
+
+      <div class="feature-grid">
+
+        <article class="feature">
+          <div class="icon">✦</div>
+          <h3>AI Recommendations</h3>
+          <p>
+            Find schemes matched to the information in your profile.
+          </p>
+        </article>
+
+        <article class="feature">
+          <div class="icon">✓</div>
+          <h3>Eligibility Checking</h3>
+          <p>
+            See which eligibility conditions you pass and which need attention.
+          </p>
+        </article>
+
+        <article class="feature">
+          <div class="icon">⌕</div>
+          <h3>Smart Scheme Search</h3>
+          <p>
+            Explore schemes by category or ask questions naturally.
+          </p>
+        </article>
+
+        <article class="feature">
+          <div class="icon">◌</div>
+          <h3>AI Assistant</h3>
+          <p>
+            Ask questions about government schemes through a conversational interface.
+          </p>
+        </article>
+
+      </div>
+    </section>
+
+
+    <!-- HOW IT WORKS -->
+    <section class="section process" id="how-it-works">
+
+      <div class="section-heading">
+        <span class="eyebrow">HOW IT WORKS</span>
+
+        <h2>
+          From your profile to relevant schemes.
+        </h2>
+      </div>
+
+      <div class="steps">
+
+        <div class="step">
+          <span>01</span>
+          <h3>Create Profile</h3>
+          <p>
+            Provide the information needed to understand your eligibility.
+          </p>
+        </div>
+
+        <div class="step">
+          <span>02</span>
+          <h3>AI Analysis</h3>
+          <p>
+            Your profile is evaluated against scheme requirements.
+          </p>
+        </div>
+
+        <div class="step">
+          <span>03</span>
+          <h3>Get Matches</h3>
+          <p>
+            Relevant schemes are identified and ranked.
+          </p>
+        </div>
+
+        <div class="step">
+          <span>04</span>
+          <h3>Check Eligibility</h3>
+          <p>
+            Review the individual eligibility checks.
+          </p>
+        </div>
+
+        <div class="step">
+          <span>05</span>
+          <h3>Apply</h3>
+          <p>
+            Continue to the official application portal.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ABOUT + CREATOR -->
+    <section class="about-section" id="about">
+
+      <div class="about-container">
+
+        <div class="about-content">
+
+          <span class="eyebrow">ABOUT JANSAHARA</span>
+
+          <h2>
+            Making government support easier to discover.
+          </h2>
+
+          <p>
+            JanSahara is an AI-powered government scheme discovery and
+            eligibility platform designed to help users understand the
+            government benefits that may be relevant to them.
+            Through profile-based matching, eligibility analysis,
+            scheme exploration and an AI assistant, JanSahara brings
+            these services together in one place.
+          </p>
+
+        </div>
+
+
+        <div class="creator-card">
+
+          <div class="creator-badge">
+            AP
+          </div>
+
+          <p class="made-by">
+            Made by
+          </p>
+
+          <h3>
+            Anoop Pandey
+          </h3>
+
+          <p class="course">
+            TY BSc CS — AIML / A / 29
+          </p>
+
+          <p class="college">
+            Nagindas Khandwala College
+          </p>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- FINAL CTA -->
+    <section class="cta">
+
+      <div>
+        <span class="eyebrow">JANSAHARA</span>
+
+        <h2>
+          Your benefits. Your eligibility. One place.
+        </h2>
+
+        <p>
+          Start discovering government schemes relevant to you.
+        </p>
+      </div>
+
+      <a class="btn btn-primary" href="register.html">
+        Create Your Profile →
+      </a>
+
+    </section>
+
+  </main>
+
+
+  <!-- FOOTER -->
+  <footer>
+    <span>© 2026 JanSahara</span>
+    <span>Government Scheme Discovery & Eligibility Platform</span>
+  </footer>
+
+  <script src="script.js"></script>
+
+</body>
+</html>
+```

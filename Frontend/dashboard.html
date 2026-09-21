@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0f2f52">
+  <title>Dashboard | JanSahara</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27%230f2f52%27/%3E%3Ctext x=%2732%27 y=%2740%27 text-anchor=%27middle%27 font-family=%27Arial%27 font-size=%2724%27 font-weight=%27900%27 fill=%27white%27%3EJS%3C/text%3E%3C/svg%3E">
+  
+<script src="brand.js"></script>
+</head>
+<body>
+  <header class="auth-nav">
+    <a class="logo" href="index.html">Jan<span>Sahara</span></a>
+    <button class="logout" id="logoutBtn">Sign Out</button>
+  </header>
+
+  <main class="dashboard">
+    <div class="dash-top">
+      <div>
+        <h1>Welcome to JanSahara</h1>
+        <p>Your government scheme assistance dashboard.</p>
+      </div>
+    </div>
+
+    <section class="welcome-card">
+      <h2>Your JanSahara Account</h2>
+      <p id="emailText">Loading account...</p>
+      <span class="user-id" id="userIdText">User ID: —</span>
+      <div class="status" id="profileStatus">Checking profile...</div>
+
+      <div class="profile-cta" id="profileCta">
+        <h3>📋 Complete your profile</h3>
+        <p>Complete the JanSahara questionnaire so we can show your personal profile and provide more accurate scheme recommendations and AI assistance.</p>
+        <a class="complete-btn" href="https://forms.gle/rgAv9pjBGZURxfDg9" target="_blank" rel="noopener noreferrer">Complete your profile ↗</a>
+      </div>
+    </section>
+
+    <section class="profile-cta" style="margin-bottom:22px;background:#fff;border-color:var(--line)">
+      <h3>✨ Your JanSahara toolkit</h3>
+      <p>Complete your profile first, then use recommendations and eligibility checks to understand which schemes may fit your circumstances. You can also ask the AI assistant questions in plain language.</p>
+    </section>
+
+    <section class="dash-grid">
+      <article class="dash-card">
+        <h3>👤 My Profile</h3>
+        <p>View the information submitted through your JanSahara profile questionnaire.</p>
+        <a href="profile.html">View Profile →</a>
+      </article>
+      <article class="dash-card">
+        <h3>🎯 Recommendations</h3>
+        <p>Discover government schemes matched to your profile.</p>
+        <a href="recommendations.html">View Recommendations →</a>
+      </article>
+      <article class="dash-card">
+        <h3>✓ Eligibility</h3>
+        <p>Check your eligibility and matching score across available schemes.</p>
+        <a href="eligibility.html">Check Eligibility →</a>
+      </article>
+      <article class="dash-card">
+        <h3>🔎 Explore Schemes</h3>
+        <p>Browse government schemes and learn about their benefits and application process.</p>
+        <a href="scheme-explorer.html">Explore Schemes →</a>
+      </article>
+      <article class="dash-card">
+        <h3>💬 JanSahara AI</h3>
+        <p>Talk with the AI assistant about schemes, benefits and eligibility.</p>
+        <a href="chatbot.html">Open AI Assistant →</a>
+      </article>
+    </section>
+  </main>
+  <footer><span>© 2026 JanSahara</span><span>Government Scheme Discovery & Eligibility Platform</span></footer>
+
+  <script>
+    const API_BASE_URL = 'http://localhost:5000';
+    const userId = localStorage.getItem('jansahara_user_id') || sessionStorage.getItem('jansahara_user_id');
+    const email = localStorage.getItem('jansahara_email') || sessionStorage.getItem('jansahara_email');
+
+    const profileFormBtn = document.getElementById('profileFormBtn');
+    if (profileFormBtn && userId) {
+      profileFormBtn.href = 'https://docs.google.com/forms/d/e/1FAIpQLSc9BTsHN5tKxQ51Aq7to273TGJ0B1_OhvRa9m9gXdISmTUmbg/viewform?usp=pp_url&entry.952470711=' + encodeURIComponent(userId);
+    }
+    const completeProfileBtn = document.getElementById('completeProfileBtn');
+    if (completeProfileBtn && userId) {
+      completeProfileBtn.href = 'https://docs.google.com/forms/d/e/1FAIpQLSc9BTsHN5tKxQ51Aq7to273TGJ0B1_OhvRa9m9gXdISmTUmbg/viewform?usp=pp_url&entry.952470711=' + encodeURIComponent(userId);
+    }
+
+    if (!userId) {
+      window.location.href = 'login.html';
+    } else {
+      document.getElementById('userIdText').textContent = `User ID: ${userId}`;
+      document.getElementById('emailText').textContent = email || 'Signed-in JanSahara user';
+
+      fetch(`${API_BASE_URL}/api/profile/${encodeURIComponent(userId)}`)
+        .then(response => response.json())
+        .then(data => {
+          const status = document.getElementById('profileStatus');
+          const cta = document.getElementById('profileCta');
+          if (data.status === 'success') {
+            const profile = data.profile || {};
+            const hasDetails = Object.keys(profile).some(key => key !== 'user_id' && profile[key] !== null && profile[key] !== '');
+            if (hasDetails) {
+              status.textContent = '✓ Profile information is available — you can update it anytime';
+            } else {
+              status.textContent = '• Profile is ready to be completed';
+            }
+            cta.style.display = 'block';
+          } else {
+            status.textContent = '• Profile information is not available yet';
+            cta.style.display = 'block';
+          }
+        })
+        .catch(() => {
+          document.getElementById('profileStatus').textContent = '• Backend connection unavailable';
+        });
+    }
+
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      localStorage.removeItem('jansahara_user_id');
+      localStorage.removeItem('jansahara_email');
+      sessionStorage.removeItem('jansahara_user_id');
+      sessionStorage.removeItem('jansahara_email');
+      window.location.href = 'login.html';
+    });
+  </script>
+</body>
+</html>

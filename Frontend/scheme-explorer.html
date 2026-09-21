@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0f2f52">
+  <title>Scheme Explorer | JanSahara</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27%230f2f52%27/%3E%3Ctext x=%2732%27 y=%2740%27 text-anchor=%27middle%27 font-family=%27Arial%27 font-size=%2724%27 font-weight=%27900%27 fill=%27white%27%3EJS%3C/text%3E%3C/svg%3E">
+  
+<script src="brand.js"></script>
+</head>
+<body>
+  <nav class="nav"><a class="logo" href="index.html">Jan<span>Sahara</span></a><div class="navlinks"><a href="dashboard.html">Dashboard</a><a href="profile.html">Profile</a><a href="recommendations.html">Recommendations</a><a href="eligibility.html">Eligibility</a><a href="chatbot.html">AI Chat</a><a href="chatbot.html">AI Chat</a></div></nav>
+  <main class="page">
+    <div class="top"><div><h1>Scheme Explorer</h1><p>Explore government schemes available in the JanSahara database.</p></div><div class="actions"><a class="btn btn-light" href="dashboard.html">Dashboard</a><button class="btn btn-primary" id="refreshBtn">Refresh</button></div></div>
+    <section class="filters"><input class="search" id="search" placeholder="Search scheme name, ministry, benefit or keyword..."><select id="category"><option value="">All categories</option><option>Education / Student</option><option>Financial / Banking</option><option>Employment / Skill</option><option>Women & Child</option><option>Citizen / Social Welfare</option></select><select id="level"><option value="">All government levels</option><option>Central</option><option>State</option><option>Central & State</option></select><button class="btn btn-primary" id="clearBtn">Clear</button></section>
+    <div class="summary"><span id="count">Loading schemes...</span><span>Browse • Search • Learn • Apply</span></div>
+    <section class="grid" id="schemeGrid"><div class="loading">Loading schemes...</div></section>
+  </main>
+<footer><span>© 2026 JanSahara</span><span>Government Scheme Discovery & Eligibility Platform</span></footer>
+<script>
+const API_BASE='http://localhost:5000';
+let schemes=[];
+const grid=document.getElementById('schemeGrid'), search=document.getElementById('search'), category=document.getElementById('category'), level=document.getElementById('level');
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));}
+function render(){const q=search.value.trim().toLowerCase(); const c=category.value.toLowerCase(); const l=level.value.toLowerCase(); const out=schemes.filter(s=>{const text=[s.scheme_name,s.ministry_department,s.benefit_description,s.scheme_description,s.classification_keywords,s.target_beneficiary].join(' ').toLowerCase();return(!q||text.includes(q))&&(!c||String(s.scheme_category||'').toLowerCase()===c)&&(!l||String(s.government_level||'').toLowerCase()===l)});document.getElementById('count').textContent=`${out.length} scheme${out.length===1?'':'s'} found`; if(!out.length){grid.innerHTML='<div class="empty">No schemes match your filters.</div>';return;} grid.innerHTML=out.map(s=>`<article class="card"><div><span class="badge">${esc(s.scheme_category||'Government Scheme')}</span><h3>${esc(s.scheme_name)}</h3><div class="meta">${esc(s.ministry_department||'Ministry not specified')}</div><div class="meta">${esc(s.government_level||'Government level not specified')} • ${esc(s.scheme_type||'Scheme')}</div><p class="desc">${esc(s.scheme_description||s.eligibility_summary||'Details available in the official scheme information.')}</p>${s.benefit_description?`<div class="benefit"><strong>Benefit:</strong> ${esc(s.benefit_description)}</div>`:''}</div><div class="card-actions">${s.official_source_url?`<a class="btn btn-primary" href="${esc(s.official_source_url)}" target="_blank" rel="noopener">Official Source ↗</a>`:''}${s.application_portal?`<a class="btn btn-light" href="${esc(s.application_portal)}" target="_blank" rel="noopener">Apply ↗</a>`:''}</div></article>`).join('');}
+async function load(){grid.innerHTML='<div class="loading">Loading schemes from JanSahara...</div>';try{const r=await fetch(`${API_BASE}/api/schemes`);const d=await r.json();if(!r.ok)throw new Error(d.message||'Unable to load schemes');schemes=d.schemes||d.results||[];render();}catch(e){grid.innerHTML=`<div class="error"><strong>Could not load schemes.</strong><br>${esc(e.message)}<br><br>Make sure Flask is running on port 5000.</div>`;document.getElementById('count').textContent='';}}
+[search,category,level].forEach(x=>x.addEventListener('input',render));document.getElementById('clearBtn').onclick=()=>{search.value='';category.value='';level.value='';render()};document.getElementById('refreshBtn').onclick=load;load();
+</script>
+</body></html>

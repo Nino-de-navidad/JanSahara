@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0f2f52">
+<title>Recommendations | JanSahara</title><link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27%230f2f52%27/%3E%3Ctext x=%2732%27 y=%2740%27 text-anchor=%27middle%27 font-family=%27Arial%27 font-size=%2724%27 font-weight=%27900%27 fill=%27white%27%3EJS%3C/text%3E%3C/svg%3E">
+
+<script src="brand.js"></script>
+</head>
+<body>
+<header class="auth-nav nav"><a class="logo" href="index.html">Jan<span>Sahara</span></a><a class="back" href="dashboard.html">← Dashboard</a><button class="logout" id="logoutBtn">Sign Out</button></header>
+<main class="page">
+<div class="head"><div><h1>Recommended Schemes</h1><p>Government schemes matched to your JanSahara profile.</p></div><div class="actions"><a class="btn secondary" href="profile.html">My Profile</a><a class="btn secondary" href="chatbot.html">AI Assistant</a><button class="btn primary" id="refreshBtn">↻ Refresh</button></div></div>
+<section class="summary"><div class="stat"><small>Available Schemes</small><strong id="totalSchemes">—</strong></div><div class="stat"><small>Eligible Candidates</small><strong id="totalCandidates">—</strong></div><div class="stat"><small>Showing</small><strong id="showing">—</strong></div></section>
+<div id="status" class="status muted">Loading recommendations...</div><section id="cards" class="cards"><div class="loading">Finding schemes for your profile…</div></section>
+</main>
+<footer><span>© 2026 JanSahara</span><span>Government Scheme Discovery & Eligibility Platform</span></footer>
+<script>
+const API='http://localhost:5000';
+const userId=localStorage.getItem('jansahara_user_id')||sessionStorage.getItem('jansahara_user_id');
+if(!userId) location.href='login.html';
+const $=id=>document.getElementById(id);
+function logout(){['jansahara_user_id','jansahara_email'].forEach(k=>{localStorage.removeItem(k);sessionStorage.removeItem(k)});location.href='login.html'}
+$('logoutBtn').onclick=logout;
+function escapeHTML(v){return String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
+function pick(obj, keys, fallback='Not provided'){for(const k of keys){if(obj&&obj[k]!==undefined&&obj[k]!==null&&String(obj[k]).trim()!=='')return obj[k]}return fallback}
+function render(items){
+ const cards=$('cards'); $('showing').textContent=items.length;
+ if(!items.length){cards.innerHTML='<div class="empty"><h2>No recommendations yet</h2><p>Complete your profile to improve scheme matching, then refresh.</p></div>';return}
+ cards.innerHTML=items.map((r,i)=>{
+  const name=pick(r,['scheme_name','name'],'Government Scheme');
+  const id=pick(r,['scheme_id'],''); const cat=pick(r,['scheme_category','category'],'Government Scheme');
+  const score=pick(r,['recommendation_score','score','match_score'],null); const eligibility=pick(r,['eligibility'],'');
+  const reason=pick(r,['reason','recommendation_reason','explanation','why_recommended'],'Matched using your profile and scheme requirements.');
+  const portal=pick(r,['application_portal','official_source_url'],'');
+  const benefit=pick(r,['benefit_description','benefits'],'');
+  return `<article class="card"><div class="card-top"><div><span class="rank">#${i+1}${id!=='Not provided'?' • '+escapeHTML(id):''}</span><h2>${escapeHTML(name)}</h2><div class="category">${escapeHTML(cat)}</div></div>${score!==null&&score!=='Not provided'?`<div class="score"><strong>${escapeHTML(score)}</strong><small>SCORE</small></div>`:''}</div>${eligibility?`<div class="meta"><span class="tag">${escapeHTML(eligibility)}</span></div>`:''}${benefit?`<div class="reason"><strong>Benefit:</strong> ${escapeHTML(benefit)}</div>`:''}<div class="reason"><strong>Why it appears:</strong> ${escapeHTML(reason)}</div><div class="card-actions">${portal!=='Not provided'?`<a class="btn primary" href="${escapeHTML(portal)}" target="_blank" rel="noopener">Official Portal ↗</a>`:''}<a class="btn secondary" href="eligibility.html">Check Eligibility</a></div></article>`
+ }).join('');
+}
+async function load(){
+ $('status').textContent='Loading recommendations...';$('status').className='status muted';$('cards').innerHTML='<div class="loading">Finding schemes for your profile…</div>';
+ try{const res=await fetch(`${API}/api/recommendations/${encodeURIComponent(userId)}`);const data=await res.json();if(!res.ok||data.status!=='success')throw new Error(data.message||'Unable to load recommendations.');$('totalSchemes').textContent=data.total_schemes??'—';$('totalCandidates').textContent=data.total_candidates??'—';render(data.recommendations||[]);$('status').textContent='✓ Recommendations generated from your current profile';$('status').className='status success'}catch(e){$('cards').innerHTML='<div class="empty"><h2>Could not load recommendations</h2><p>'+escapeHTML(e.message)+'</p><p style="margin-top:8px">Make sure Flask is running on port 5000.</p></div>';$('status').textContent='Backend connection error';$('status').className='status error'}}
+$('refreshBtn').onclick=load;load();
+</script>
+</body></html>

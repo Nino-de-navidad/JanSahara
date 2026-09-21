@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0f2f52">
+  <title>My Profile | JanSahara</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27%230f2f52%27/%3E%3Ctext x=%2732%27 y=%2740%27 text-anchor=%27middle%27 font-family=%27Arial%27 font-size=%2724%27 font-weight=%27900%27 fill=%27white%27%3EJS%3C/text%3E%3C/svg%3E">
+  
+<script src="brand.js"></script>
+</head>
+<body>
+  <header class="auth-nav">
+    <a class="logo" href="index.html">Jan<span>Sahara</span></a>
+    <div>
+      <a class="back" href="dashboard.html">← Dashboard</a>
+      <button class="logout" id="logoutBtn">Sign Out</button>
+    </div>
+  </header>
+
+  <main class="profile-page">
+    <div class="profile-head">
+      <div>
+        <h1>My Profile</h1>
+        <p>Your profile is used by JanSahara for eligibility and scheme recommendations.</p>
+      </div>
+      <span class="profile-id" id="userIdText">User ID: —</span>
+    </div>
+
+    <div id="pageStatus" class="status muted">Loading your profile...</div>
+
+    <section class="profile-card">
+      <h2>Personal Information</h2>
+      <div class="profile-grid">
+        <div class="field"><label>Age</label><span id="age">—</span></div>
+        <div class="field"><label>Gender</label><span id="gender">—</span></div>
+        <div class="field"><label>Marital Status</label><span id="marital_status">—</span></div>
+        <div class="field"><label>Citizenship</label><span id="citizenship">—</span></div>
+        <div class="field"><label>State</label><span id="state">—</span></div>
+        <div class="field"><label>District</label><span id="district">—</span></div>
+        <div class="field"><label>Area Type</label><span id="area_type">—</span></div>
+        <div class="field"><label>Social Category</label><span id="social_category">—</span></div>
+        <div class="field"><label>BPL Status</label><span id="bpl_status">—</span></div>
+      </div>
+    </section>
+
+    <section class="profile-card">
+      <h2>Education & Employment</h2>
+      <div class="profile-grid">
+        <div class="field"><label>Currently Studying</label><span id="currently_studying">—</span></div>
+        <div class="field"><label>Highest Qualification</label><span id="highest_qualification">—</span></div>
+        <div class="field"><label>Education Level</label><span id="current_education_level">—</span></div>
+        <div class="field"><label>Course / Stream</label><span id="course_stream">—</span></div>
+        <div class="field"><label>Institution Type</label><span id="institution_type">—</span></div>
+        <div class="field"><label>Study Mode</label><span id="study_mode">—</span></div>
+        <div class="field"><label>Year of Study</label><span id="year_of_study">—</span></div>
+        <div class="field"><label>Academic Percentage</label><span id="academic_percentage">—</span></div>
+        <div class="field"><label>Employment Status</label><span id="employment_status">—</span></div>
+        <div class="field"><label>Occupation</label><span id="occupation">—</span></div>
+        <div class="field"><label>Job Seeking</label><span id="job_seeking">—</span></div>
+        <div class="field"><label>Skill Development Interest</label><span id="skill_development_interest">—</span></div>
+        <div class="field"><label>Entrepreneurship Interest</label><span id="entrepreneurship_interest">—</span></div>
+        <div class="field"><label>Skills</label><span id="skills">—</span></div>
+      </div>
+    </section>
+
+    <section class="profile-card">
+      <h2>Income & Household</h2>
+      <div class="profile-grid">
+        <div class="field"><label>Annual Household Income</label><span id="annual_household_income">—</span></div>
+        <div class="field"><label>Annual Individual Income</label><span id="annual_individual_income">—</span></div>
+        <div class="field"><label>Household Size</label><span id="household_size">—</span></div>
+        <div class="field"><label>Children</label><span id="number_of_children">—</span></div>
+        <div class="field"><label>Dependents</label><span id="number_of_dependents">—</span></div>
+        <div class="field"><label>Women-Headed Household</label><span id="women_headed_household">—</span></div>
+        <div class="field"><label>Single-Parent Household</label><span id="single_parent_household">—</span></div>
+        <div class="field"><label>Primary Earner</label><span id="primary_earner">—</span></div>
+      </div>
+    </section>
+
+    <section class="profile-card">
+      <h2>Disability, Agriculture & Housing</h2>
+      <div class="profile-grid">
+        <div class="field"><label>Disability Status</label><span id="disability_status">—</span></div>
+        <div class="field"><label>Disability Percentage</label><span id="disability_percentage">—</span></div>
+        <div class="field"><label>Disability Certificate</label><span id="disability_certificate">—</span></div>
+        <div class="field"><label>Widow Status</label><span id="widow_status">—</span></div>
+        <div class="field"><label>Orphan Status</label><span id="orphan_status">—</span></div>
+        <div class="field"><label>Involved in Agriculture</label><span id="involved_in_agriculture">—</span></div>
+        <div class="field"><label>Agriculture Role</label><span id="agriculture_role">—</span></div>
+        <div class="field"><label>Land Ownership</label><span id="land_ownership">—</span></div>
+        <div class="field"><label>Land Holding</label><span id="land_holding_acres">—</span></div>
+        <div class="field"><label>Agriculture Type</label><span id="agriculture_type">—</span></div>
+        <div class="field"><label>House Ownership</label><span id="house_ownership">—</span></div>
+        <div class="field"><label>House Type</label><span id="house_type">—</span></div>
+        <div class="field"><label>Electricity</label><span id="electricity_connection">—</span></div>
+        <div class="field"><label>Toilet Facility</label><span id="toilet_facility">—</span></div>
+        <div class="field"><label>Drinking Water</label><span id="drinking_water_source">—</span></div>
+      </div>
+    </section>
+
+    <section class="profile-card">
+      <h2>Digital Access & Scheme Interests</h2>
+      <div class="profile-grid">
+        <div class="field"><label>Digital Literacy</label><span id="digital_literacy">—</span></div>
+        <div class="field"><label>Smartphone Access</label><span id="smartphone_access">—</span></div>
+        <div class="field"><label>Internet Access</label><span id="internet_access">—</span></div>
+        <div class="field"><label>Scheme Interests</label><span id="scheme_interests">—</span></div>
+        <div class="field"><label>Primary Requirement</label><span id="primary_requirement">—</span></div>
+        <div class="field"><label>Receiving Government Benefits</label><span id="receiving_government_benefits">—</span></div>
+        <div class="field"><label>Current Schemes</label><span id="current_schemes">—</span></div>
+        <div class="field"><label>Previous Scheme Application</label><span id="previous_scheme_application">—</span></div>
+        <div class="field"><label>Previous Application Rejected</label><span id="previous_application_rejected">—</span></div>
+        <div class="field"><label>Available Documents</label><span id="available_documents">—</span></div>
+      </div>
+    </section>
+
+    <section class="profile-card">
+      <h2>Profile Actions</h2>
+      <p class="muted">If your profile is incomplete, use the JanSahara questionnaire to provide or update your information. Google Form submissions are synchronized with your existing User ID.</p>
+      <div class="profile-actions">
+        <a class="btn btn-primary" href="dashboard.html">Back to Dashboard</a>
+        <a class="btn btn-secondary" href="recommendations.html">View Recommendations</a>
+        <a class="btn btn-secondary" href="eligibility.html">Check Eligibility</a>
+        <a class="btn btn-secondary" href="chatbot.html">Open AI Assistant</a>
+      </div>
+    </section>
+  </main>
+
+  <footer><span>© 2026 JanSahara</span><span>Government Scheme Discovery & Eligibility Platform</span></footer>
+<script>
+    const API_BASE_URL = 'http://localhost:5000';
+    const userId = localStorage.getItem('jansahara_user_id') || sessionStorage.getItem('jansahara_user_id');
+
+    if (!userId) {
+      window.location.href = 'login.html';
+    }
+
+    document.getElementById('userIdText').textContent = `User ID: ${userId || '—'}`;
+
+    const fields = [
+      'age','gender','marital_status','citizenship','state','district','area_type','social_category','bpl_status',
+      'currently_studying','highest_qualification','current_education_level','course_stream','institution_type','study_mode','year_of_study','academic_percentage',
+      'employment_status','occupation','job_seeking','skill_development_interest','entrepreneurship_interest','skills',
+      'annual_household_income','annual_individual_income','household_size','number_of_children','number_of_dependents','women_headed_household','single_parent_household','primary_earner',
+      'disability_status','disability_percentage','disability_certificate','widow_status','orphan_status','involved_in_agriculture','agriculture_role','land_ownership','land_holding_acres','agriculture_type','house_ownership','house_type','electricity_connection','toilet_facility','drinking_water_source',
+      'digital_literacy','smartphone_access','internet_access','scheme_interests','primary_requirement','receiving_government_benefits','current_schemes','previous_scheme_application','previous_application_rejected','available_documents'
+    ];
+
+    function displayValue(value) {
+      if (value === null || value === undefined || String(value).trim() === '') return 'Not provided';
+      return String(value);
+    }
+
+    async function loadProfile() {
+      const status = document.getElementById('pageStatus');
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/profile/${encodeURIComponent(userId)}`);
+        const data = await response.json();
+        if (!response.ok || data.status !== 'success') throw new Error(data.message || 'Unable to load profile.');
+        const profile = data.profile || {};
+        let provided = 0;
+        fields.forEach(key => {
+          const el = document.getElementById(key);
+          if (!el) return;
+          const value = displayValue(profile[key]);
+          el.textContent = value;
+          el.classList.toggle('empty', value === 'Not provided');
+          if (value !== 'Not provided') provided++;
+        });
+        status.textContent = `✓ Profile loaded • ${provided} profile fields currently provided`;
+        status.className = 'status success';
+      } catch (error) {
+        status.textContent = error.message || 'Unable to connect to the JanSahara server.';
+        status.className = 'status error';
+      }
+    }
+
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      localStorage.removeItem('jansahara_user_id');
+      localStorage.removeItem('jansahara_email');
+      sessionStorage.removeItem('jansahara_user_id');
+      sessionStorage.removeItem('jansahara_email');
+      window.location.href = 'login.html';
+    });
+
+    if (userId) loadProfile();
+  </script>
+</body>
+</html>

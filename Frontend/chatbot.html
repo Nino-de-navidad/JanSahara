@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JanSahara | AI Assistant</title>
+  <link rel="stylesheet" href="style.css" />
+  
+<script src="brand.js"></script>
+</head>
+<body class="chat-page">
+  <header class="navbar">
+    <a class="logo" href="index.html">Jan<span>Sahara</span></a>
+    <nav>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="profile.html">Profile</a>
+      <a href="recommendations.html">Recommendations</a>
+      <a href="eligibility.html">Eligibility</a>
+      <a href="scheme-explorer.html">Explore Schemes</a>
+    </nav>
+  </header>
+
+  <main class="chat-shell">
+    <div class="chat-head">
+      <div><span class="eyebrow">JANSAHARA AI ASSISTANT</span><h1>Ask about government schemes.</h1><p>Ask about benefits, eligibility, documents, or finding schemes relevant to your profile.</p></div>
+      <div class="user-pill" id="userPill">User: —</div>
+    </div>
+
+    <section class="chat-card">
+      <div class="chat-toolbar"><div class="assistant-status"><span class="dot"></span> JanSahara Assistant</div><button class="clear-btn" id="clearChat">Clear chat</button></div>
+      <div class="messages" id="messages" aria-live="polite"></div>
+      <div class="suggestions">
+        <button class="suggestion">What schemes am I eligible for?</button>
+        <button class="suggestion">Show me education schemes</button>
+        <button class="suggestion">What documents do I need?</button>
+        <button class="suggestion">How can I apply?</button>
+      </div>
+      <form class="composer" id="chatForm">
+        <textarea id="query" placeholder="Ask JanSahara something..." aria-label="Your question"></textarea>
+        <button class="send-btn" id="sendBtn" type="submit">Send</button>
+      </form>
+    </section>
+    <div class="back-links"><a href="dashboard.html">← Dashboard</a><a href="scheme-explorer.html">Browse all schemes →</a></div>
+  </main>
+
+<footer><span>© 2026 JanSahara</span><span>Government Scheme Discovery & Eligibility Platform</span></footer>
+<script>
+const API_BASE='http://localhost:5000';
+const userId=localStorage.getItem('jansahara_user_id') || sessionStorage.getItem('jansahara_user_id');
+const messages=document.getElementById('messages'), form=document.getElementById('chatForm'), query=document.getElementById('query'), sendBtn=document.getElementById('sendBtn');
+document.getElementById('userPill').textContent='User: '+(userId||'Not logged in');
+function addMessage(text,type='bot',extra=null){const row=document.createElement('div');row.className='msg '+type;const box=document.createElement('div');box.className='bubble';box.textContent=text;row.appendChild(box);messages.appendChild(row);messages.scrollTop=messages.scrollHeight;if(extra?.scheme_name){const card=document.createElement('div');card.className='result-card';card.innerHTML='<strong>'+escapeHtml(extra.scheme_name)+'</strong>'+(extra.eligibility?'<div>Eligibility: '+escapeHtml(extra.eligibility)+'</div>':'')+(extra.eligibility_score!=null?'<div>Score: '+escapeHtml(String(extra.eligibility_score))+'</div>':'');if(extra.scheme_id){card.innerHTML+='<div style="margin-top:7px"><a href="scheme-explorer.html?scheme='+encodeURIComponent(extra.scheme_id)+'">View scheme</a></div>'}box.appendChild(card);}}
+function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function welcome(){messages.innerHTML='';addMessage('Hello! I am the JanSahara AI Assistant. Ask me about government schemes, eligibility, benefits, documents, or applications.','bot');}
+welcome();
+async function sendMessage(text){text=text.trim();if(!text)return;if(!userId){addMessage('Please log in first so I can use your JanSahara profile for personalized answers.','bot');return;}addMessage(text,'user');query.value='';sendBtn.disabled=true;sendBtn.textContent='...';addMessage('Thinking…','bot');const typingRow=messages.lastElementChild;typingRow.querySelector('.bubble').classList.add('typing');try{const res=await fetch(`${API_BASE}/api/chat/${encodeURIComponent(userId)}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query:text})});const data=await res.json();typingRow.remove();if(!res.ok||data.status!=='success')throw new Error(data.message||'Unable to get a response');addMessage(data.response||'I could not generate a response for that question.', 'bot', data);}catch(err){typingRow.remove();addMessage('I could not connect to the JanSahara server. Please make sure Flask is running on localhost:5000 and try again.','bot');console.error(err)}finally{sendBtn.disabled=false;sendBtn.textContent='Send';query.focus()}}
+form.addEventListener('submit',e=>{e.preventDefault();sendMessage(query.value)});query.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage(query.value)}});document.querySelectorAll('.suggestion').forEach(b=>b.addEventListener('click',()=>sendMessage(b.textContent)));document.getElementById('clearChat').addEventListener('click',welcome);
+</script>
+</body>
+</html>
