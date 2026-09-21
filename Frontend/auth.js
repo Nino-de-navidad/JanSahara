@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:5000';
+const API_BASE_URL = 'https://jansahara-backend.onrender.com/';
 
 function showMessage(message, type = 'error') {
   const box = document.getElementById('message');
